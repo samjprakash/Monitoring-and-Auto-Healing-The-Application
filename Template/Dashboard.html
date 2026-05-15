@@ -1,0 +1,149 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Dashboard | Monitoring Portal</title>
+
+  <!-- Bootstrap -->
+  <link
+    href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css"
+    rel="stylesheet"
+  >
+
+  <style>
+    body {
+      background-color: #f4f6f9;
+    }
+
+    .card {
+      border-left: 6px solid transparent;
+      border-radius: 10px;
+    }
+
+    .status-green { color: #16a34a; }
+    .status-red { color: #dc2626; }
+    .status-yellow { color: #ca8a04; }
+
+    .navbar-brand {
+      font-weight: 600;
+    }
+  </style>
+</head>
+
+<body>
+
+<!-- ================= NAVBAR ================= -->
+<nav class="navbar navbar-dark bg-dark px-4">
+  <span class="navbar-brand">
+    👤 {{ user }}
+  </span>
+
+  <div class="ms-auto">
+    <a href="{{ grafana_url }}" target="_blank"
+       class="btn btn-sm btn-primary me-2">
+      Grafana
+    </a>
+
+    <a href="{{ prometheus_url }}" target="_blank"
+       class="btn btn-sm btn-success me-2">
+      Prometheus
+    </a>
+
+    <a href="{{ metrics_url }}" target="_blank"
+       class="btn btn-sm btn-warning me-2">
+      Metrics
+    </a>
+
+    <a href="/logout" class="btn btn-sm btn-danger">
+      Logout
+    </a>
+  </div>
+</nav>
+
+<!-- ================= MAIN CONTENT ================= -->
+<div class="container mt-5">
+
+  <div class="text-center mb-5">
+    <h3 class="fw-bold">Intelligent Monitoring & Auto-Healing System</h3>
+    <p class="text-muted">
+      Real-time Kubernetes monitoring powered by Prometheus & Grafana
+    </p>
+  </div>
+
+  <div class="row g-4">
+
+    <!-- ================= AUTO HEALING ================= -->
+    <div class="col-md-4">
+      <div class="card p-4 shadow-sm" style="border-left-color:#3b82f6">
+        <h6 class="text-muted fw-semibold">🤖 Auto-Healing Status</h6>
+        <hr>
+
+        <p class="fw-bold status-green">ACTIVE</p>
+
+        <small class="text-muted">Last Action</small>
+        <p class="mb-0">Restarted cart-service pod</p>
+      </div>
+    </div>
+
+    <!-- ================= POD HEALTH ================= -->
+    <div class="col-md-4">
+      <div class="card p-4 shadow-sm" style="border-left-color:#22c55e">
+        <h6 class="text-muted fw-semibold">🧩 Pod Health Summary</h6>
+        <hr>
+
+        <p>Total Pods: <b>{{ pods.total }}</b></p>
+        <p class="status-green fw-semibold">Running: {{ pods.running }}</p>
+        <p class="status-red fw-semibold">Failed: {{ pods.failed }}</p>
+        <p class="status-yellow fw-semibold mb-0">Pending: {{ pods.pending }}</p>
+      </div>
+    </div>
+
+    <!-- ================= ALERT STATUS (UPDATED) ================= -->
+    <div class="col-md-4">
+      <div class="card p-4 shadow-sm" style="border-left-color:#ef4444">
+        <h6 class="text-muted fw-semibold">🚨 Alert Status</h6>
+        <hr>
+
+        <!-- Dynamic alert content -->
+        <div id="alert-status" class="fw-semibold text-muted">
+          Loading alerts...
+        </div>
+      </div>
+    </div>
+
+  </div>
+</div>
+
+<!-- ================= ALERT SCRIPT (NEW) ================= -->
+<script>
+fetch("/api/alerts")
+  .then(res => res.json())
+  .then(data => {
+    const alertDiv = document.getElementById("alert-status");
+
+    if (data.count === 0) {
+      alertDiv.innerHTML =
+        "<span class='status-green'>No Active Alerts ✅</span>";
+      return;
+    }
+
+    let html = `<p class="status-red fw-bold">${data.count} Active Alerts</p><ul>`;
+    data.alerts.forEach(a => {
+      html += `
+        <li>
+          <b>${a.name}</b><br>
+          <small>Severity: ${a.severity} | Namespace: ${a.namespace}</small>
+        </li>`;
+    });
+    html += "</ul>";
+
+    alertDiv.innerHTML = html;
+  })
+  .catch(() => {
+    document.getElementById("alert-status").innerHTML =
+      "<span class='status-yellow'>Unable to fetch alerts</span>";
+  });
+</script>
+
+</body>
+</html>
