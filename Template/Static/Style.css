@@ -1,0 +1,86 @@
+/* ===== Global ===== */
+body.dark-bg {
+  background: linear-gradient(135deg, #0f172a, #020617);
+  color: #e5e7eb;
+  font-family: "Segoe UI", sans-serif;
+}
+
+/* ===== Navbar ===== */
+.navbar {
+  background: linear-gradient(90deg, #2563eb, #1e40af);
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.4);
+}
+
+/* ===== Cards ===== */
+.card-dark {
+  background: linear-gradient(180deg, #020617, #020617);
+  border-left: 5px solid #2563eb;
+  border-radius: 12px;
+  transition: transform 0.2s ease, box-shadow 0.2s ease;
+}
+
+.card-dark:hover {
+  transform: translateY(-4px);
+  box-shadow: 0 10px 25px rgba(0, 0, 0, 0.6);
+}
+
+/* ===== Card Titles ===== */
+.card-title {
+  font-size: 1rem;
+  font-weight: 600;
+  color: #60a5fa;
+  margin-bottom: 10px;
+}
+
+/* ===== Status Colors ===== */
+.status-green {
+  color: #22c55e;
+  font-weight: 600;
+}
+
+.status-red {
+  color: #ef4444;
+  font-weight: 600;
+}
+
+.status-yellow {
+  color: #eab308;
+  font-weight: 600;
+}
+
+/* ===== Alerts List ===== */
+ul {
+  padding-left: 18px;
+}
+
+ul li {
+  color: #fca5a5;
+}
+
+/* ===== Buttons ===== */
+.btn-primary {
+  background-color: #2563eb;
+  border: none;
+}
+
+.btn-primary:hover {
+  background-color: #1d4ed8;
+}
+
+.btn-success {
+  background-color: #16a34a;
+  border: none;
+}
+
+.btn-success:hover {
+  background-color: #15803d;
+}
+
+.btn-danger {
+  background-color: #dc2626;
+  border: none;
+}
+
+.btn-danger:hover {
+  background-color: #b91c1c;
+}
